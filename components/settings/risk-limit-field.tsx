@@ -4,7 +4,6 @@ export function RiskLimitField({ label, hint, value, onChange }: { label: string
       <label className="text-sm font-medium">{label}</label>
       <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
       <div className="mt-3 flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">฿</span>
         <input
           type="number"
           min={0}

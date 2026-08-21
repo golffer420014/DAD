@@ -7,20 +7,16 @@ export function SettingsView() {
   const setRiskLimits = useDashboardStore((state) => state.setRiskLimits)
 
   return (
-    <div className="animate-in fade-in duration-500">
-      <div className="mb-8">
-        <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Risk management</p>
-        <h1 className="text-3xl font-semibold tracking-tight">ตั้งค่า</h1>
-        <p className="mt-2 text-sm text-muted-foreground">กำหนดเพดานยอดรับต่อเลข เมื่อยอดรวมของเลขใดเกินเพดาน ระบบจะไฮไลต์เตือนในหน้าแดชบอร์ดทันที</p>
-      </div>
+    <div className="h-full min-h-0 overflow-y-auto animate-in fade-in duration-500">
+      <h1 className="mb-3 text-xl font-semibold tracking-tight">ตั้งค่า</h1>
 
       <section className="rounded-xl border bg-card p-5 shadow-sm">
         <div className="mb-4 flex items-center gap-2">
           <ShieldAlert className="size-4 text-amber-600" />
-          <h2 className="font-semibold tracking-tight">เพดานความเสี่ยงต่อเลข</h2>
+          <h2 className="font-semibold tracking-tight">เพดานยอดสำหรับแนะนำการกั๊ก</h2>
         </div>
         <p className="mb-4 text-xs text-muted-foreground">
-          ตั้งแยกตามประเภทการซื้อ เพราะแต่ละประเภทมักรับความเสี่ยงได้ไม่เท่ากัน — ใส่ 0 หากไม่ต้องการจำกัดประเภทนั้น
+          เลขที่ยอดต่ำกว่าเพดานทุกประเภทจะถูกแนะนำให้ "กั๊ก" ไว้เอง ส่วนเลขที่เกินเพดานจะถูกแนะนำให้ส่งต่อขึ้นสายบน — ตั้งแยกตามประเภทการซื้อ เพราะแต่ละประเภทมักรับความเสี่ยงได้ไม่เท่ากัน ใส่ 0 หากไม่ต้องการให้ประเภทนั้นมีผลต่อคำแนะนำ
         </p>
         <div className="grid gap-3 sm:grid-cols-3">
           <RiskLimitField

@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import * as XLSX from 'xlsx'
-import type { FileSummary, RecordRow, RiskLimits, View } from '@/lib/types'
+import type { FileSummary, Held, RecordRow, RiskLimits, View } from '@/lib/types'
+import { aggregateByNumber, getRiskFlags } from '@/lib/format'
 
 type DashboardStore = {
   // state
@@ -14,6 +15,7 @@ type DashboardStore = {
   processing: boolean
   mobileNav: boolean
   riskLimits: RiskLimits
+  held: Held
 
   // actions
   setView: (view: View) => void
@@ -26,12 +28,15 @@ type DashboardStore = {
   importFiles: (fileList: FileList | File[] | null) => Promise<void>
   viewFile: (name: string) => void
   setRiskLimits: (limits: RiskLimits) => void
+  toggleHeld: (number: string) => void
+  applySuggestedHold: () => void
+  clearHeld: () => void
 }
 
 export const useDashboardStore = create<DashboardStore>()(
   persist(
-    (set) => ({
-      view: 'dashboard',
+    (set, get) => ({
+      view: 'triage',
       files: [],
       records: [],
       search: '',
@@ -40,6 +45,7 @@ export const useDashboardStore = create<DashboardStore>()(
       processing: false,
       mobileNav: false,
       riskLimits: { top: 0, bottom: 0, tod: 0 },
+      held: {},
 
       setView: (view) => set({ view, mobileNav: false }),
       setSearch: (search) => set({ search }),
@@ -50,6 +56,15 @@ export const useDashboardStore = create<DashboardStore>()(
       removeFile: (id) => set((state) => ({ files: state.files.filter((file) => file.id !== id) })),
       viewFile: (name) => set({ view: 'explorer', fileFilter: name, search: '' }),
       setRiskLimits: (riskLimits) => set({ riskLimits }),
+      toggleHeld: (number) => set((state) => ({ held: { ...state.held, [number]: !state.held[number] } })),
+      applySuggestedHold: () => {
+        const { records, riskLimits } = get()
+        if (riskLimits.top <= 0 && riskLimits.bottom <= 0 && riskLimits.tod <= 0) return
+        const held: Held = {}
+        for (const row of aggregateByNumber(records)) held[row.number] = !getRiskFlags(row, riskLimits).any
+        set({ held })
+      },
+      clearHeld: () => set({ held: {} }),
 
       importFiles: async (fileList) => {
         if (!fileList?.length) return

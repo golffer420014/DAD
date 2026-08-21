@@ -1,6 +1,6 @@
 import type { RecordRow, RiskLimits } from '@/lib/types'
 
-export const money = (value: number) => `฿${value.toLocaleString('th-TH')}`
+export const money = (value: number) => `${value.toLocaleString('th-TH')}`
 
 export const aggregateByNumber = (records: RecordRow[]) =>
   Object.values(

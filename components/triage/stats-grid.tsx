@@ -1,28 +1,27 @@
-import { Activity, BarChart3, Database, Files } from 'lucide-react'
 import { useDashboardStore } from '@/lib/store'
 import { aggregateByNumber, money } from '@/lib/format'
-import { StatCard } from '@/components/dashboard/stat-card'
 
 export function StatsGrid() {
   const files = useDashboardStore((state) => state.files)
   const records = useDashboardStore((state) => state.records)
 
   const numbers = aggregateByNumber(records)
-  const totalRecords = records.length
   const totalValue = records.reduce((sum, row) => sum + row.top + row.bottom + row.tod, 0)
 
   const stats = [
-    { label: 'ไฟล์ทั้งหมด', value: files.length.toString(), icon: Files },
-    { label: 'จำนวนรายการ', value: totalRecords.toLocaleString(), icon: Activity },
-    { label: 'มูลค่ารวม', value: money(totalValue), icon: BarChart3 },
-    { label: 'เลขไม่ซ้ำ', value: numbers.length.toLocaleString(), icon: Database },
+    { label: 'ไฟล์', value: files.length.toLocaleString() },
+    { label: 'รายการ', value: records.length.toLocaleString() },
+    { label: 'มูลค่ารวม', value: money(totalValue) },
+    { label: 'เลขไม่ซ้ำ', value: numbers.length.toLocaleString() },
   ]
 
   return (
-    <section className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-xs text-muted-foreground">
       {stats.map((stat) => (
-        <StatCard key={stat.label} {...stat} />
+        <span key={stat.label}>
+          <span className="font-semibold text-foreground">{stat.value}</span> {stat.label}
+        </span>
       ))}
-    </section>
+    </div>
   )
 }

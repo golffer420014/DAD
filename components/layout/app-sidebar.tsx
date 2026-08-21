@@ -1,10 +1,10 @@
-import { BarChart3, Database, Files, LayoutDashboard, Settings2 } from 'lucide-react'
+import { Database, Files, ListFilter, Settings2, SplitSquareVertical } from 'lucide-react'
 import { useDashboardStore } from '@/lib/store'
 import type { View } from '@/lib/types'
 
-const NAV_ITEMS: [View, typeof LayoutDashboard, string][] = [
-  ['dashboard', LayoutDashboard, 'แดชบอร์ด'],
-  ['explorer', Database, 'สำรวจข้อมูล'],
+const NAV_ITEMS: [View, typeof ListFilter, string][] = [
+  ['triage', ListFilter, 'คัดกรอง'],
+  ['explorer', Database, 'ข้อมูลดิบ'],
   ['files', Files, 'ไฟล์ที่นำเข้า'],
 ]
 
@@ -22,11 +22,11 @@ export function AppSidebar() {
       <aside className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r bg-sidebar p-4 transition-transform lg:translate-x-0 ${mobileNav ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="flex items-center gap-3 px-2 py-2">
         <div className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
-          <BarChart3 className="size-5" />
+          <SplitSquareVertical className="size-5" />
         </div>
         <div>
-          <p className="font-semibold tracking-tight">Excel Analytics</p>
-          <p className="text-xs text-muted-foreground">Business intelligence</p>
+          <p className="font-semibold tracking-tight">จัดการโพย</p>
+          <p className="text-xs text-muted-foreground">รวมยอด → กั๊ก → ส่งต่อ</p>
         </div>
       </div>
       <nav className="mt-8 flex flex-col gap-1 text-sm">
