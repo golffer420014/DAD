@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun add *)",
+      "Bash(bunx tsc *)",
+      "Bash(bun run *)",
+      "Read(//tmp/**)",
+      "Bash(curl -sv http://localhost:3000)",
+      "Bash(chromium-cli --session ead)",
+      "Bash(npm ls *)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(bunx --version)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(lsof -ti:3000 -sTCP:LISTEN)",
+      "Bash(xargs -r kill)",
+      "Bash(node scripts/validate_palette.js \"#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4\" --mode light)",
+      "Bash(node scripts/validate_palette.js \"#3987e5,#d95926,#199e70,#c98500,#d55181\" --mode dark)",
+      "Bash(find / -iname \"*chromium-cli*\" 2>/dev/null | grep -v /proc | head -20; echo \"---\"; find / -maxdepth 6 -iname \"*playwright*\" 2>/dev/null | grep -v /proc | head -20)",
+      "Read(//c//**)",
+      "Bash(curl -sI --max-time 5 https://registry.npmjs.org)",
+      "Bash(timeout 90 bunx playwright --version)",
+      "Bash(timeout 110 bunx playwright install chromium)",
+      "Bash(curl -sf http://localhost:3000)",
+      "Bash(node .smoke-test.mjs)",
+      "Bash(node .smoke-test2.mjs)",
+      "Bash(rm -f .smoke-test.mjs .smoke-test2.mjs)",
+      "Bash(bun remove *)",
+      "Bash(node .smoke-theme.mjs)",
+      "Bash(node .smoke-footer.mjs)",
+      "Bash(node -e ' *)",
+      "Bash(node .smoke-real.mjs)",
+      "Bash(node .smoke-risk.mjs)",
+      "Bash(node .smoke-topn.mjs)",
+      "Bash(node .smoke-sort.mjs)",
+      "Bash(powershell -Command \"Get-ChildItem docs | Select Name,Length\")"
+    ]
+  }
+}
