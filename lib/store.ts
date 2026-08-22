@@ -102,11 +102,13 @@ export const useDashboardStore = create<DashboardStore>()(
           }
         }
 
-        set((state) => ({
-          records: additions.length ? [...state.records, ...additions] : state.records,
-          files: [...summaries, ...state.files],
+        set({
+          records: additions,
+          files: summaries,
+          selected: null,
+          held: {},
           processing: false,
-        }))
+        })
       },
     }),
     {
