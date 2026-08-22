@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
 import type { FileSummary, Held, RecordRow, RiskLimits } from '@/lib/types'
 import { aggregateByNumber, getRiskFlags } from '@/lib/format'
 
@@ -61,23 +61,25 @@ export const useDashboardStore = create<DashboardStore>()(
           const id = crypto.randomUUID()
           try {
             const buffer = await file.arrayBuffer()
-            const workbook = XLSX.read(buffer, { type: 'array', cellText: true, cellDates: true })
-            const sheet = workbook.Sheets[workbook.SheetNames[0]]
-            const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: '' })
+            const workbook = new ExcelJS.Workbook()
+            await workbook.xlsx.load(buffer)
+            const sheet = workbook.worksheets[0]
+            const headers = Array.from(sheet.getRow(1).values as unknown[], (v) => String(v ?? '').toLowerCase())
+            const findIndex = (keys: string[]) => headers.findIndex((header) => keys.some((needle) => header.includes(needle)))
+            const numberIndex = findIndex(['เลข', 'number'])
+
             const fileRecords: RecordRow[] = []
-            rows.forEach((raw) => {
-              const entries = Object.entries(raw)
-              const findIndex = (keys: string[]) => entries.findIndex(([key]) => keys.some((needle) => key.toLowerCase().includes(needle)))
-              const numberIndex = findIndex(['เลข', 'number'])
-              const number = String((numberIndex >= 0 ? entries[numberIndex][1] : '') ?? '').trim()
-              if (!/^\d+$/.test(number)) return
+            for (let r = 2; r <= sheet.rowCount; r++) {
+              const values = sheet.getRow(r).values as unknown[]
+              const number = String((numberIndex >= 0 ? values[numberIndex] : '') ?? '').trim()
+              if (!/^\d+$/.test(number)) continue
               const parse = (value: unknown) => Number(String(value ?? '').replace(/,/g, '')) || 0
               // Some sheets leave บน/ล่าง/โต๊ด headers blank; fall back to their position
               // right after the เลข column (the layout every one of these sheets uses).
               const byNameOrPosition = (keys: string[], offsetFromNumber: number) => {
                 const namedIndex = findIndex(keys)
-                if (namedIndex >= 0) return entries[namedIndex][1]
-                return numberIndex >= 0 ? entries[numberIndex + offsetFromNumber]?.[1] : undefined
+                if (namedIndex >= 0) return values[namedIndex]
+                return numberIndex >= 0 ? values[numberIndex + offsetFromNumber] : undefined
               }
               fileRecords.push({
                 sourceFile: file.name,
@@ -86,7 +88,7 @@ export const useDashboardStore = create<DashboardStore>()(
                 bottom: parse(byNameOrPosition(['ล่าง', 'bottom'], 2)),
                 tod: parse(byNameOrPosition(['โต๊ด', 'tod'], 3)),
               })
-            })
+            }
             additions.push(...fileRecords)
             summaries.push({
               id,

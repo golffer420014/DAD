@@ -1,21 +1,16 @@
 'use client'
 
 import { useRef } from 'react'
-import { ChevronRight, Menu, Upload } from 'lucide-react'
+import { ChevronRight, Upload } from 'lucide-react'
 import { useDashboardStore } from '@/lib/store'
 
 export function AppTopbar() {
-  const mobileNav = useDashboardStore((state) => state.mobileNav)
-  const setMobileNav = useDashboardStore((state) => state.setMobileNav)
   const importFiles = useDashboardStore((state) => state.importFiles)
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b bg-background/90 px-4 backdrop-blur md:px-8">
-      <button className="rounded-lg p-2 hover:bg-accent lg:hidden" onClick={() => setMobileNav(!mobileNav)}>
-        <Menu className="size-5" />
-      </button>
-      <div className="hidden items-center gap-2 text-sm text-muted-foreground md:flex">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <span>จัดการโพย</span>
         <ChevronRight className="size-4" />
         <span className="text-foreground">คัดกรอง</span>
