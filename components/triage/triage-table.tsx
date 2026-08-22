@@ -45,6 +45,11 @@ export function TriageTable() {
   const hasLimits = riskLimits.top > 0 || riskLimits.bottom > 0 || riskLimits.tod > 0
   const hasSelection = Object.values(held).some(Boolean)
 
+  const sumTop = numbers.reduce((sum, row) => sum + row.top, 0)
+  const sumBottom = numbers.reduce((sum, row) => sum + row.bottom, 0)
+  const sumTod = numbers.reduce((sum, row) => sum + row.tod, 0)
+  const sumTotal = sumTop + sumBottom + sumTod
+
   const stickyTh = 'sticky top-0 z-10 border-b bg-muted/95 backdrop-blur-sm'
 
   const th = (key: SortKey, label: string, align: 'left' | 'right', className: string) => (
@@ -139,13 +144,15 @@ export function TriageTable() {
         {numbers.length === 0 && <p className="p-8 text-center text-sm text-muted-foreground">นำเข้าไฟล์เพื่อดูเลขที่ถูกรวมข้อมูล</p>}
       </div>
       {numbers.length > 0 && (
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t p-4 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t p-4 text-xs">
           <span className="font-medium text-foreground">รวมทั้งหมด {numbers.length.toLocaleString()} เลข</span>
-          <span>
-            บน {money(numbers.reduce((sum, row) => sum + row.top, 0))} · ล่าง {money(numbers.reduce((sum, row) => sum + row.bottom, 0))} · โต๊ด{' '}
-            {money(numbers.reduce((sum, row) => sum + row.tod, 0))} ·{' '}
-            <span className="font-semibold text-foreground">รวม {money(numbers.reduce((sum, row) => sum + row.top + row.bottom + row.tod, 0))}</span>
-          </span>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-muted-foreground">
+            <span><span className="font-semibold text-foreground">{money(sumTop)}</span> บน</span>
+            <span><span className="font-semibold text-foreground">{money(sumBottom)}</span> ล่าง</span>
+            <span><span className="font-semibold text-foreground">{money(sumTod)}</span> โต๊ด</span>
+            <span className="hidden h-4 w-px bg-border sm:block" />
+            <span className="font-semibold text-foreground">รวม {money(sumTotal)}</span>
+          </div>
         </div>
       )}
     </section>

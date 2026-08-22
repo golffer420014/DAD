@@ -68,7 +68,11 @@
       "Bash(node /tmp/verify10.js)",
       "Bash(node_modules/.bin/next build *)",
       "Bash(node \"/private/tmp/claude-501/-Users-admin-Desktop-git-personal-ME-app-DAD/f5844304-0e5d-4ca4-b812-6285847b7481/scratchpad/gen-template.cjs\")",
-      "Bash(node \"/private/tmp/claude-501/-Users-admin-Desktop-git-personal-ME-app-DAD/f5844304-0e5d-4ca4-b812-6285847b7481/scratchpad/test-template.cjs\")"
+      "Bash(node \"/private/tmp/claude-501/-Users-admin-Desktop-git-personal-ME-app-DAD/f5844304-0e5d-4ca4-b812-6285847b7481/scratchpad/test-template.cjs\")",
+      "Bash(npx eslint *)",
+      "Bash(git -C \"/Users/admin/Desktop/git personal/ME/app/DAD\" mv components/triage/data-quality-banner.tsx components/triage/file-badges.tsx)",
+      "Bash(git -C \"/Users/admin/Desktop/git personal/ME/app/DAD\" mv components/settings/settings-view.tsx components/settings/risk-limit-dialog.tsx)",
+      "Bash(lsof -ti:3001)"
     ]
   }
 }

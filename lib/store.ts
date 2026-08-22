@@ -1,16 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import * as XLSX from 'xlsx'
-import type { FileSummary, Held, RecordRow, RiskLimits, View } from '@/lib/types'
+import type { FileSummary, Held, RecordRow, RiskLimits } from '@/lib/types'
 import { aggregateByNumber, getRiskFlags } from '@/lib/format'
 
 type DashboardStore = {
   // state
-  view: View
   files: FileSummary[]
   records: RecordRow[]
-  search: string
-  fileFilter: string
   selected: RecordRow | null
   processing: boolean
   mobileNav: boolean
@@ -18,15 +15,10 @@ type DashboardStore = {
   held: Held
 
   // actions
-  setView: (view: View) => void
-  setSearch: (search: string) => void
-  setFileFilter: (sourceFile: string) => void
   selectRecord: (row: RecordRow | null) => void
   setMobileNav: (open: boolean) => void
   toggleMobileNav: () => void
-  removeFile: (id: string) => void
   importFiles: (fileList: FileList | File[] | null) => Promise<void>
-  viewFile: (name: string) => void
   setRiskLimits: (limits: RiskLimits) => void
   toggleHeld: (number: string) => void
   applySuggestedHold: () => void
@@ -36,25 +28,17 @@ type DashboardStore = {
 export const useDashboardStore = create<DashboardStore>()(
   persist(
     (set, get) => ({
-      view: 'triage',
       files: [],
       records: [],
-      search: '',
-      fileFilter: '',
       selected: null,
       processing: false,
       mobileNav: false,
       riskLimits: { top: 0, bottom: 0, tod: 0 },
       held: {},
 
-      setView: (view) => set({ view, mobileNav: false }),
-      setSearch: (search) => set({ search }),
-      setFileFilter: (fileFilter) => set({ fileFilter }),
       selectRecord: (row) => set({ selected: row }),
       setMobileNav: (open) => set({ mobileNav: open }),
       toggleMobileNav: () => set((state) => ({ mobileNav: !state.mobileNav })),
-      removeFile: (id) => set((state) => ({ files: state.files.filter((file) => file.id !== id) })),
-      viewFile: (name) => set({ view: 'explorer', fileFilter: name, search: '' }),
       setRiskLimits: (riskLimits) => set({ riskLimits }),
       toggleHeld: (number) => set((state) => ({ held: { ...state.held, [number]: !state.held[number] } })),
       applySuggestedHold: () => {

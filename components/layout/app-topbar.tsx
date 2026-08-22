@@ -4,10 +4,7 @@ import { useRef } from 'react'
 import { ChevronRight, Menu, Upload } from 'lucide-react'
 import { useDashboardStore } from '@/lib/store'
 
-const VIEW_LABEL = { triage: 'คัดกรอง', explorer: 'ข้อมูลดิบ', files: 'ไฟล์ที่นำเข้า', settings: 'ตั้งค่า' } as const
-
 export function AppTopbar() {
-  const view = useDashboardStore((state) => state.view)
   const mobileNav = useDashboardStore((state) => state.mobileNav)
   const setMobileNav = useDashboardStore((state) => state.setMobileNav)
   const importFiles = useDashboardStore((state) => state.importFiles)
@@ -21,7 +18,7 @@ export function AppTopbar() {
       <div className="hidden items-center gap-2 text-sm text-muted-foreground md:flex">
         <span>จัดการโพย</span>
         <ChevronRight className="size-4" />
-        <span className="text-foreground">{VIEW_LABEL[view]}</span>
+        <span className="text-foreground">คัดกรอง</span>
       </div>
       <div className="flex items-center gap-2">
         <input

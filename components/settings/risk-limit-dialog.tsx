@@ -1,23 +1,25 @@
-import { ShieldAlert } from 'lucide-react'
+import { Settings2, ShieldAlert } from 'lucide-react'
 import { useDashboardStore } from '@/lib/store'
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { RiskLimitField } from '@/components/settings/risk-limit-field'
 
-export function SettingsView() {
+export function RiskLimitDialog() {
   const riskLimits = useDashboardStore((state) => state.riskLimits)
   const setRiskLimits = useDashboardStore((state) => state.setRiskLimits)
 
   return (
-    <div className="h-full min-h-0 overflow-y-auto animate-in fade-in duration-500">
-      <h1 className="mb-3 text-xl font-semibold tracking-tight">ตั้งค่า</h1>
-
-      <section className="rounded-xl border bg-card p-5 shadow-sm">
+    <Dialog>
+      <DialogTrigger className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground">
+        <Settings2 className="size-3.5" /> ตั้งค่า
+      </DialogTrigger>
+      <DialogContent>
         <div className="mb-4 flex items-center gap-2">
           <ShieldAlert className="size-4 text-amber-600" />
-          <h2 className="font-semibold tracking-tight">เพดานยอดสำหรับแนะนำการกั๊ก</h2>
+          <DialogTitle>เพดานยอดสำหรับแนะนำการกั๊ก</DialogTitle>
         </div>
-        <p className="mb-4 text-xs text-muted-foreground">
+        <DialogDescription className="mb-4">
           เลขที่ยอดต่ำกว่าเพดานทุกประเภทจะถูกแนะนำให้ "กั๊ก" ไว้เอง ส่วนเลขที่เกินเพดานจะถูกแนะนำให้ส่งต่อขึ้นสายบน — ตั้งแยกตามประเภทการซื้อ เพราะแต่ละประเภทมักรับความเสี่ยงได้ไม่เท่ากัน ใส่ 0 หากไม่ต้องการให้ประเภทนั้นมีผลต่อคำแนะนำ
-        </p>
+        </DialogDescription>
         <div className="grid gap-3 sm:grid-cols-3">
           <RiskLimitField
             label="บน"
@@ -38,7 +40,7 @@ export function SettingsView() {
             onChange={(tod) => setRiskLimits({ ...riskLimits, tod })}
           />
         </div>
-      </section>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }
