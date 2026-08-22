@@ -19,6 +19,7 @@ type DashboardStore = {
   setMobileNav: (open: boolean) => void
   toggleMobileNav: () => void
   importFiles: (fileList: FileList | File[] | null) => Promise<void>
+  removeFile: (id: string) => void
   setRiskLimits: (limits: RiskLimits) => void
   toggleHeld: (number: string) => void
   applySuggestedHold: () => void
@@ -82,6 +83,7 @@ export const useDashboardStore = create<DashboardStore>()(
                 return numberIndex >= 0 ? values[numberIndex + offsetFromNumber] : undefined
               }
               fileRecords.push({
+                fileId: id,
                 sourceFile: file.name,
                 number,
                 top: parse(byNameOrPosition(['บน', 'top'], 1)),
@@ -104,14 +106,19 @@ export const useDashboardStore = create<DashboardStore>()(
           }
         }
 
-        set({
-          records: additions,
-          files: summaries,
-          selected: null,
-          held: {},
+        set((state) => ({
+          records: [...state.records, ...additions],
+          files: [...state.files, ...summaries],
           processing: false,
-        })
+        }))
       },
+
+      removeFile: (id) =>
+        set((state) => ({
+          files: state.files.filter((file) => file.id !== id),
+          records: state.records.filter((record) => record.fileId !== id),
+          selected: state.selected?.fileId === id ? null : state.selected,
+        })),
     }),
     {
       name: 'excel-analytics-settings',

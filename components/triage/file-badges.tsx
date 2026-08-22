@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, X } from 'lucide-react'
 import { useDashboardStore } from '@/lib/store'
 import type { FileSummary } from '@/lib/types'
 
@@ -16,6 +16,7 @@ const STATUS_LABEL: Record<FileSummary['status'], string> = {
 
 export function FileBadges() {
   const files = useDashboardStore((state) => state.files)
+  const removeFile = useDashboardStore((state) => state.removeFile)
   if (files.length === 0) return null
 
   return (
@@ -24,10 +25,18 @@ export function FileBadges() {
         <span
           key={file.id}
           title={`${file.name} · ${STATUS_LABEL[file.status]}`}
-          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${STATUS_STYLE[file.status]}`}
+          className={`inline-flex items-center gap-1.5 rounded-full border py-1 pl-2.5 pr-1.5 text-xs font-medium ${STATUS_STYLE[file.status]}`}
         >
           {file.status !== 'Ready' && <AlertTriangle className="size-3.5" />}
           {file.name}
+          <button
+            type="button"
+            onClick={() => removeFile(file.id)}
+            aria-label={`นำ ${file.name} ออก`}
+            className="rounded-full p-0.5 transition hover:bg-black/10 dark:hover:bg-white/10"
+          >
+            <X className="size-3" />
+          </button>
         </span>
       ))}
     </>
