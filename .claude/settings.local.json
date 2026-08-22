@@ -79,7 +79,11 @@
       "Bash(node \"/private/tmp/claude-501/-Users-admin-Desktop-git-personal-ME-app-DAD/4527868e-28c0-4ad5-85cb-14933c89f7b9/scratchpad/test-import.js\")",
       "Bash(cp \"/private/tmp/claude-501/-Users-admin-Desktop-git-personal-ME-app-DAD/4527868e-28c0-4ad5-85cb-14933c89f7b9/scratchpad/test-import.js\" ./__test-import.js)",
       "Bash(node ./__test-import.js)",
-      "Bash(rm -f ./__test-import.js)"
+      "Bash(rm -f ./__test-import.js)",
+      "Bash(npx --yes pnpm@10 --version)",
+      "Bash(npx --yes pnpm@10 install --no-frozen-lockfile)",
+      "Bash(CI=true npx --yes pnpm@10 install --no-frozen-lockfile)",
+      "Bash(CI=true npx --yes pnpm@10 install --frozen-lockfile)"
     ]
   }
 }
